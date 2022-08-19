@@ -141,6 +141,10 @@ title = EAU connectivity beacons
 
 ++ localhost
 host = localhost
+++ ghola
+host = ghola.here
+++ qanat
+host = qanat.here
 ++ uplink
 host = 69.4.102.161
 ++ FSLY
@@ -159,6 +163,14 @@ title = BOS connectivity beacons
 
 ++ kulon
 host = kulon.nodeless.net
+++ blackice
+host = home.grahams.wtf
+++ blackice-upstream
+host = 209.6.224.1
+++ blackice-neighbor
+host = 209.6.226.18
+++ starscream
+host = jeffm.io
 
 + mysite3
 menu = the clown
@@ -175,3 +187,10 @@ title = SEA connectivity beacons
 
 ++ hose
 host = sea.da39a3ee5e6b4b0d3255bfef95601890afd80709.com
+
++ mysite5
+menu = community
+title = community beacons
+
+++ live365
+host = ingest.live365.com
