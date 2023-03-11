@@ -1,1 +1,2 @@
+media description "IoT-Untrusted Network"
 inet 192.168.166.1 255.255.255.0 NONE vlan 666 vlandev ix1 group untrusted
