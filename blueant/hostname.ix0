@@ -1,2 +1,3 @@
 media description WAN mtu 9000
 dhcp
+hwfeatures tso
