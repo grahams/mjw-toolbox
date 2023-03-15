@@ -1,4 +1,4 @@
-dhcpd_flags=
+dhcpd_flags=ix1 vlan13 vlan666
 iked_flags=
 ntpd_flags=
 pkg_scripts=messagebus avahi_daemon upsmon telegraf smokeping_fcgi smokeping
