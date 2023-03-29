@@ -19,6 +19,7 @@ mariefrance: \
 	/etc/ssh/sshd_config \
 	/etc/sysctl.conf \
 	/etc/syslog.conf \
+	/etc/nut/ups.conf \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
 	/root/.forward
@@ -102,6 +103,11 @@ mariefrance: \
 /etc/syslog.conf : syslog.conf
 	install -o root -g wheel -m 0644 \
 	  syslog.conf /etc/syslog.conf
+
+/etc/nut/ups.conf : ups.conf
+	@if ! [ -d /var/db/pkg/nut* ]; then pkg_add nut; fi
+	install -o _ups -g wheel -m 0600 \
+	  ups.conf /etc/nut/ups.conf
 
 /var/log/unbound :
 	touch /var/log/unbound
