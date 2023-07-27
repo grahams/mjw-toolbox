@@ -166,3 +166,7 @@ host = beacon.uncertain.fm
 ++ ghola
 title=ghola
 host = 192.168.223.127
+
+++ donkey
+title=donkey
+host = donkey.grahams.wtf
