@@ -164,8 +164,11 @@ blueant: \
 
 /etc/telegraf/telegraf.conf : telegraf.conf
 	@if ! [ -d /var/db/pkg/telegraf* ]; then doas pkg_add telegraf; fi
-	doas install -o root -g wheel -m 0644 \
-	  telegraf.conf /etc/telegraf/telegraf.conf
+	~/bin/op run --env-file=.env -- \
+	  sh ../install-secretfied.sh \
+	    telegraf.conf \
+	    "-o root -g wheel -m 0644" \
+	    /etc/telegraf/telegraf.conf
 
 /home/grahams/bin/set-upstream-bandwidth.sh : set-upstream-bandwidth.sh
 	@if ! [ -d /home/grahams/bin ]; then mkdir /home/grahams/bin; fi
