@@ -1,6 +1,7 @@
 mariefrance: \
 	/etc/acme-client.conf \
 	/etc/boot.conf \
+	/etc/ttys \
 	/etc/dhclient.conf \
 	/etc/dhcpd.conf \
 	/etc/doas.conf \
@@ -31,6 +32,10 @@ mariefrance: \
 /etc/boot.conf : boot.conf
 	install -o root -g wheel -m 0644 \
 	  boot.conf /etc/boot.conf
+
+/etc/ttys : ttys
+	install -o root -g wheel -m 0644 \
+	  ttys /etc/ttys
 
 /etc/dhclient.conf : dhclient.conf
 	install -o root -g wheel -m 0644 \
