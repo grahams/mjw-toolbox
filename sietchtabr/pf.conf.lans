@@ -1,5 +1,7 @@
 ########################################################################
 # Home LAN (wifi, etc)
+# TODO: enable dhcp enforcement using dhcpd(8)'s -L and -A pf table
+# maintenance.
 # NAT outbound
 pass out log quick on em0 inet \
   from { 192.168.223.21, 192.168.223.24 } \
@@ -32,6 +34,8 @@ pass in  log quick on em5 inet6 \
 # Pass traffic from the router to this LAN
 pass out log quick on em5 inet \
   from em5 to em5:network
+pass out log quick on em5 inet \
+  from em5:network to em5:network
 pass out log quick on em5 inet6 \
   from (em5) to (em5:network)
 
@@ -144,3 +148,24 @@ pass in  log quick on vlan666 inet \
 pass out log quick on vlan666 inet \
   from vlan666 \
   to vlan666:network 
+
+
+########################################################################
+# Local Promised Lan Segment
+# Pass this LAN's outbound traffic
+pass in  log quick on vether0 inet \
+  from vether0:network to any
+
+pass in  log quick on vether0 inet \
+  from 10.42.1.254 to taqwa.here
+pass out log quick on em5 inet \
+  from 10.42.1.254 to taqwa.here
+
+# Pass traffic from the router to this LAN
+pass out log quick on vether0 inet \
+  from vether0 to vether0:network
+
+# Pass traffic from the shitternet LAN to TPL
+pass out log quick on vether0 inet \
+  from 192.168.223.0/24 to 10.42.0.0/16 \
+  nat-to 10.42.1.1

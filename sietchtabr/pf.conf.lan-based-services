@@ -1,11 +1,8 @@
 ########################################################################
-# sietchumbu's externally available services
-match in on em0 inet \
+pass in log quick on any inet \
   proto tcp \
-  from any \
-  to em0 port 24625 \
-  rdr-to sietchumbu.here port 32400
-pass in log quick on em0 inet \
+  from any to sietchumbu.here port 32400
+pass out log quick on em5 inet \
   proto tcp \
   from any to sietchumbu.here port 32400
 
