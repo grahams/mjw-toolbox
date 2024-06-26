@@ -141,14 +141,22 @@ title = Local Connectivity Beacons
 
 ++ localhost
 host = localhost
+++ el-sayal
+host = el-sayal.here
 ++ ghola
 host = ghola.here
+++ otheym
+host = otheym.here
+++ ptp-gb-A
+host = ptp-gb-A.here
+++ ptp-gb-B
+host = ptp-gb-B.here
+++ ptp-pb-A
+host = ptp-pb-A.here
+++ ptp-pb-B
+host = ptp-pb-B.here
 ++ qanat
 host = qanat.here
-++ ptpA
-host = ptpA.here
-++ ptpB
-host = ptpB.here
 ++ wap1
 host = wap1.here
 ++ wap2
@@ -188,12 +196,8 @@ title = BOS connectivity beacons
 
 ++ kulon
 host = kulon.nodeless.net
-++ blackice
+++ blueant
 host = home.grahams.wtf
-++ blackice-upstream
-host = 209.6.224.1
-++ blackice-neighbor
-host = 209.6.226.18
 ++ starscream
 host = jeffm.io
 
@@ -201,17 +205,12 @@ host = jeffm.io
 menu = the clown
 title = beacons in the clown
 
+++ khala
+host = khala.here
 ++ korba
 host = korba.nodeless.net
 ++ hq
 host = hq.layeraleph.com
-
-+ mysite4
-menu = SEA
-title = SEA connectivity beacons
-
-++ hose
-host = sea.da39a3ee5e6b4b0d3255bfef95601890afd80709.com
 
 + mysite5
 menu = community
@@ -219,3 +218,13 @@ title = community beacons
 
 ++ live365
 host = ingest.live365.com
+
++ mysite6
+menu = vpns
+title = vpns
+++ tpl
+host = bb3.nodeless.net
+++ dixieflatline
+host = 192.168.2.209
+++ mneumonic
+host = 192.168.2.210

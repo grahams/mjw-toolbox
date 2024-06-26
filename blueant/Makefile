@@ -32,7 +32,6 @@ blueant: \
 	/home/grahams/bin/set-upstream-bandwidth.sh \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
-	/var/unbound/etc/adblock.conf \
 	/root/.forward
 
 /etc/acme-client.conf : acme-client.conf
@@ -183,15 +182,6 @@ blueant: \
 /var/unbound/etc/unbound.conf : unbound.conf
 	doas install -o root -g _unbound -m 0640 \
 	  unbound.conf /var/unbound/etc/unbound.conf
-
-/var/unbound/etc/adblock.conf : adblock.conf
-	@if ! id -u _adblock > /dev/null; then doas useradd -s /sbin/nologin _adblock; fi
-	ftp https://www.geoghegan.ca/pub/unbound-adblock/0.4/unbound-adblock.sh
-	doas install -o root -g bin -m 0700 \
-	  unbound-adblock.sh /usr/local/bin/unbound-adblock.sh
-	doas install -o _adblock -g _unbound -m 0640 \
-	  adblock.conf /var/unbound/etc/adblock.conf
-	if ! [ -e /var/cron/tabs/_adblock ]; then cat cronjob-adblock | doas crontab -u _adblock - ; fi
 
 /root/.forward : .forward
 	doas install -o root -g wheel -m 0644 \

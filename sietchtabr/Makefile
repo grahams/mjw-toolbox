@@ -4,14 +4,20 @@ sietchtabr: \
   /etc/dhcpd.conf \
   /etc/dhcpcd.conf \
   /etc/doas.conf \
+  /etc/hostname.bridge0 \
+  /etc/hostname.bridge42 \
   /etc/hostname.em0 \
   /etc/hostname.em4 \
   /etc/hostname.em5 \
   /etc/hostname.enc1 \
   /etc/hostname.enc2 \
-  /etc/hostname.gre0 \
+  /etc/hostname.enc3 \
+  /etc/hostname.enc4 \
   /etc/hostname.pflow0 \
+  /etc/hostname.sec0 \
+  /etc/hostname.wg0 \
   /etc/hostname.wg1 \
+  /etc/hostname.vether0 \
   /etc/hostname.vlan42 \
   /etc/hostname.vlan666 \
   /etc/httpd.conf \
@@ -31,14 +37,20 @@ sietchtabr: \
   /etc/pfstat.conf \
   /etc/rad.conf \
   /etc/rc.local \
+  /etc/relayd.conf \
   /etc/resolv.conf \
   /etc/smokeping/config \
   /etc/ssh/ssh_config \
   /etc/ssh/sshd_config \
   /etc/sysctl.conf \
   /etc/syslog.conf \
+  /etc/vm.conf \
+  /home/sysop/bin/backup.sh \
   /home/sysop/bin/maintain.sh \
   /home/sysop/bin/mon-uplink.sh \
+  /var/vmd/arrakeen.weaver.tpl.qcow2 \
+  /var/vmd/axlotl-tank.here.qcow2 \
+  /var/vmd/ns1.weaver.tpl.qcow2 \
   /usr/local/libexec/munin/plugins/sensors_ \
   /usr/local/libexec/munin/plugins/unbound_munin_ \
   /var/unbound/etc/unbound.conf \
@@ -58,6 +70,7 @@ sietchtabr: \
 	  dhcpcd.conf /etc/dhcpcd.conf
 
 /etc/dhcpd.conf : dhcpd.conf
+	doas dhcpd -nc dhcpd.conf
 	doas install -o root -g wheel -m 0644 \
 	  dhcpd.conf /etc/dhcpd.conf
 
@@ -69,6 +82,14 @@ sietchtabr: \
 	doas -C ./doas.conf
 	doas install -o root -g wheel -m 0600 \
 	  doas.conf /etc/doas.conf
+
+/etc/hostname.bridge0 : hostname.bridge0
+	doas install -o root -g wheel -m 0640 \
+	  hostname.bridge0 /etc/hostname.bridge0
+
+/etc/hostname.bridge42 : hostname.bridge42
+	doas install -o root -g wheel -m 0640 \
+	  hostname.bridge42 /etc/hostname.bridge42
 
 /etc/hostname.em0 : hostname.em0
 	doas install -o root -g wheel -m 0640 \
@@ -102,13 +123,28 @@ sietchtabr: \
 	doas install -o root -g wheel -m 0640 \
 	  hostname.enc2 /etc/hostname.enc2
 
-/etc/hostname.gre0 : hostname.gre0
+/etc/hostname.enc3 : hostname.enc3
 	doas install -o root -g wheel -m 0640 \
-	  hostname.gre0 /etc/hostname.gre0
+	  hostname.enc3 /etc/hostname.enc3
+
+/etc/hostname.enc4 : hostname.enc4
+	doas install -o root -g wheel -m 0640 \
+	  hostname.enc4 /etc/hostname.enc4
 
 /etc/hostname.pflow0 : hostname.pflow0
 	doas install -o root -g wheel -m 0640 \
 	  hostname.pflow0 /etc/hostname.pflow0
+
+/etc/hostname.sec0 : hostname.sec0
+	doas install -o root -g wheel -m 0640 \
+	  hostname.sec0 /etc/hostname.sec0
+
+/etc/hostname.wg0 : hostname.wg0
+	~/bin/op run --env-file=.env -- \
+	  sh ../install-secretfied.sh \
+	    hostname.wg0 \
+	    "-o root -g wheel -m 0640" \
+	    /etc/hostname.wg0
 
 /etc/hostname.wg1 : hostname.wg1
 	~/bin/op run --env-file=.env -- \
@@ -116,6 +152,10 @@ sietchtabr: \
 	    hostname.wg1 \
 	    "-o root -g wheel -m 0640" \
 	    /etc/hostname.wg1
+
+/etc/hostname.vether0 : hostname.vether0
+	doas install -o root -g wheel -m 0640 \
+	  hostname.vether0 /etc/hostname.vether0
 
 /etc/hostname.vlan42 : hostname.vlan42
 	doas install -o root -g wheel -m 0640 \
@@ -126,8 +166,10 @@ sietchtabr: \
 	  hostname.vlan666 /etc/hostname.vlan666
 
 /etc/httpd.conf : httpd.conf
+	doas httpd -nf httpd.conf
 	doas install -o root -g wheel -m 0644 \
 	  httpd.conf /etc/httpd.conf
+	doas rcctl reload httpd
 
 /etc/iked.conf : iked.conf
 	~/bin/op run --env-file=.env -- \
@@ -203,6 +245,12 @@ sietchtabr: \
 	doas install -o root -g wheel -m 0644 \
 	  rc.local /etc/rc.local
 
+/etc/relayd.conf : relayd.conf
+	doas relayd -nf ./relayd.conf
+	doas install -o root -g wheel -m 0600 \
+	  relayd.conf /etc/relayd.conf
+	doas rcctl reload relayd
+
 /etc/resolv.conf : resolv.conf
 	doas install -o root -g wheel -m 0644 \
 	  resolv.conf /etc/resolv.conf
@@ -215,9 +263,9 @@ sietchtabr: \
 	doas install -o root -g wheel -m 0644 \
 	  ssh_config /etc/ssh/ssh_config
 
-/etc/ssh/sshd_config : ../openbsd-skel/sshd_config
+/etc/ssh/sshd_config : sshd_config
 	doas install -o root -g wheel -m 0644 \
-	  ../openbsd-skel/sshd_config /etc/ssh/sshd_config
+	  sshd_config /etc/ssh/sshd_config
 
 /etc/syslog.conf : syslog.conf
 	doas install -o root -g wheel -m 0644 \
@@ -227,6 +275,15 @@ sietchtabr: \
 	doas install -o root -g wheel -m 0644 \
 	  sysctl.conf /etc/sysctl.conf
 
+/etc/vm.conf : vm.conf /var/vmd/ns1.weaver.tpl.qcow2 /var/vmd/arrakeen.weaver.tpl.qcow2 /var/vmd/axlotl-tank.here.qcow2
+	doas vmd -ndf ./vm.conf
+	doas install -o root -g wheel -m 0644 \
+	  vm.conf /etc/vm.conf
+
+/home/sysop/bin/backup.sh : backup.sh
+	doas install -o sysop -g wheel -m 0750 \
+	  backup.sh /home/sysop/bin/backup.sh
+
 /home/sysop/bin/maintain.sh : maintain.sh
 	doas install -o sysop -g wheel -m 0750 \
 	  maintain.sh /home/sysop/bin/maintain.sh
@@ -234,6 +291,21 @@ sietchtabr: \
 /home/sysop/bin/mon-uplink.sh : mon-uplink.sh
 	doas install -o sysop -g wheel -m 0750 \
 	  mon-uplink.sh /home/sysop/bin/mon-uplink.sh
+
+/var/vmd/arrakeen.weaver.tpl.qcow2 :
+	vmctl create -s 256G /var/vmd/arrakeen.weaver.tpl.qcow2
+	doas chown sysop._vmd /var/vmd/arrakeen.weaver.tpl.qcow2
+	doas chmod 660 /var/vmd/arrakeen.weaver.tpl.qcow2
+
+/var/vmd/axlotl-tank.here.qcow2 :
+	vmctl create -s 1T /var/vmd/axlotl-tank.here.qcow2
+	doas chown sysop._vmd /var/vmd/axlotl-tank.here.qcow2
+	doas chmod 660 /var/vmd/axlotl-tank.here.qcow2
+
+/var/vmd/ns1.weaver.tpl.qcow2 :
+	vmctl create -s 4G /var/vmd/ns1.weaver.tpl.qcow2
+	doas chown sysop._vmd /var/vmd/ns1.weaver.tpl.qcow2
+	doas chmod 660 /var/vmd/ns1.weaver.tpl.qcow2
 
 /usr/local/libexec/munin/plugins/sensors_ : sensors_
 	doas install -o root -g bin -m 0755 \
