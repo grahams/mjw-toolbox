@@ -1,2 +1,2 @@
 media description WAN
-dhcp
+inet 50.170.228.250 255.255.255.252
