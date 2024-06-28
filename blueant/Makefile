@@ -5,7 +5,6 @@ blueant: \
 	/etc/dhclient.conf \
 	/etc/dhcpd.conf \
 	/etc/doas.conf \
-	/etc/hostname.re0 \
 	/etc/hostname.ix0 \
 	/etc/hostname.ix1 \
 	/etc/hostname.enc0 \
@@ -59,10 +58,6 @@ blueant: \
 	doas install -o root -g wheel -m 0600 \
 	  doas.conf /etc/doas.conf
 
-/etc/hostname.re0 : hostname.re0
-	doas install -o root -g wheel -m 0640 \
-	  hostname.re0 /etc/hostname.re0
-
 /etc/hostname.ix0 : hostname.ix0
 	doas install -o root -g wheel -m 0640 \
 	  hostname.ix0 /etc/hostname.ix0
@@ -114,11 +109,9 @@ blueant: \
 	doas install -o root -g wheel -m 0644 \
 	  ntpd.conf /etc/ntpd.conf
 
-/etc/pf.conf : pf.conf /home/grahams/bin/set-upstream-bandwidth.sh cronjob-bandwidth
+/etc/pf.conf : pf.conf 
 	doas install -o root -g wheel -m 0600 \
 	  pf.conf /etc/pf.conf
-	doas /home/grahams/bin/set-upstream-bandwidth.sh
-	@if ! [ -e /var/cron/tabs/grahams ]; then cat cronjob-bandwidth | doas crontab -u grahams - ; fi
 
 /etc/pf.sshbots: ../openbsd-skel/pf.sshbots
 	doas install -o root -g wheel -m 0600 \
