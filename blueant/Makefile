@@ -28,7 +28,6 @@ blueant: \
 	/etc/sysctl.conf \
 	/etc/syslog.conf \
 	/etc/telegraf/telegraf.conf \
-	/home/grahams/bin/set-upstream-bandwidth.sh \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
 	/root/.forward
@@ -161,11 +160,6 @@ blueant: \
 	    telegraf.conf \
 	    "-o root -g wheel -m 0644" \
 	    /etc/telegraf/telegraf.conf
-
-/home/grahams/bin/set-upstream-bandwidth.sh : set-upstream-bandwidth.sh
-	@if ! [ -d /home/grahams/bin ]; then mkdir /home/grahams/bin; fi
-	doas install -o grahams -g grahams -m 0750 \
-	  set-upstream-bandwidth.sh /home/grahams/bin/set-upstream-bandwidth.sh
 
 /var/log/unbound :
 	doas touch /var/log/unbound
