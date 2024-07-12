@@ -144,7 +144,7 @@ host = localhost
 host = 192.168.2.1
 
 ++ default
-host = 209.6.224.1
+host = burro.grahams.wtf
 
 ++ FSLY
 host = www.fastly-debug.com
