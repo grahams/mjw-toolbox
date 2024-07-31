@@ -139,12 +139,18 @@ title = Wilmot connectivity beacons
 
 ++ localhost
 host = localhost
-
 ++ gateway
 host = 192.168.2.1
-
 ++ default
 host = burro.grahams.wtf
+++ live365
+host = ingest.live365.com
+++ ufm
+host = beacon.uncertain.fm
+++ ghola
+host = ghola.grahams.wtf
+++ starscream
+host = jeffm.io
 
 ++ FSLY
 host = www.fastly-debug.com
@@ -154,19 +160,3 @@ host = 8.8.8.8
 host = 9.9.9.9
 ++ NET
 host = 1.1.1.1
-
-++ live365
-title=live365
-host = ingest.live365.com
-
-++ ufm
-title=ufm
-host = beacon.uncertain.fm
-
-++ ghola
-title=ghola
-host = 192.168.223.127
-
-++ donkey
-title=donkey
-host = donkey.grahams.wtf
