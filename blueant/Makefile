@@ -86,7 +86,7 @@ blueant: \
 	  httpd.conf /etc/httpd.conf
 
 /etc/iked.conf : iked.conf
-	~/bin/op run --env-file=.env -- \
+	op run --env-file=.env -- \
 	  sh ../install-secretfied.sh \
 	    iked.conf \
 	    "-o root -g wheel -m 0600" \
