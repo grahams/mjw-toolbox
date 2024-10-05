@@ -7,6 +7,7 @@ mariefrance: \
 	/etc/doas.conf \
 	/etc/hostname.em0 \
 	/etc/hostname.em1 \
+	/etc/iked.conf \
 	/etc/login.conf \
 	/etc/mygate \
 	/etc/newsyslog.conf \
@@ -56,6 +57,13 @@ mariefrance: \
 /etc/hostname.em1 : hostname.em1
 	install -o root -g wheel -m 0640 \
 	  hostname.em1 /etc/hostname.em1
+
+/etc/iked.conf : iked.conf
+	~/bin/op run --env-file=.env -- \
+	  sh ../install-secretfied.sh \
+	    iked.conf \
+	    "-o root -g wheel -m 0600" \
+	    /etc/iked.conf
 
 /etc/login.conf : login.conf
 	install -o root -g wheel -m 0644 \
