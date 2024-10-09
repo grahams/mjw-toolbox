@@ -21,6 +21,7 @@ blueant: \
 	/etc/pf.sshbots \
 	/etc/rc.conf.local \
 	/etc/resolv.conf \
+	/etc/sensorsd.conf \
 	/etc/shells \
 	/etc/smokeping/config \
 	/etc/ssh/ssh_config \
@@ -30,6 +31,7 @@ blueant: \
 	/etc/telegraf/telegraf.conf \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
+	/root/bin/shutdown-low-battery.sh \
 	/root/.forward
 
 /etc/acme-client.conf : acme-client.conf
@@ -124,6 +126,10 @@ blueant: \
 	doas install -o root -g wheel -m 0644 \
 	  resolv.conf /etc/resolv.conf
 
+/etc/sensorsd.conf : sensorsd.conf
+	doas install -o root -g wheel -m 0644 \
+	  sensorsd.conf /etc/sensorsd.conf
+
 /etc/shells : shells
 	doas install -o root -g wheel -m 0644 \
 	  shells /etc/shells
@@ -169,6 +175,10 @@ blueant: \
 /var/unbound/etc/unbound.conf : unbound.conf
 	doas install -o root -g _unbound -m 0640 \
 	  unbound.conf /var/unbound/etc/unbound.conf
+
+/root/bin/shutdown-low-battery.sh : shutdown-low-battery.sh
+	doas install -D -o root -g wheel -m 0700 \
+	  shutdown-low-battery.sh /root/bin/shutdown-low-battery.sh
 
 /root/.forward : .forward
 	doas install -o root -g wheel -m 0644 \
