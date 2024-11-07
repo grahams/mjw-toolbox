@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # wait seconds
-limit=120
+limit=30
 
 # get the charging state of the UPS
 CHARGING=$(sysctl -n hw.sensors.upd0.indicator1)
