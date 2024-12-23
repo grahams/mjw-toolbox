@@ -10,6 +10,7 @@ mariefrance: \
 	/etc/iked.conf \
 	/etc/login.conf \
 	/etc/mygate \
+	/etc/myname \
 	/etc/newsyslog.conf \
 	/etc/ntpd.conf \
 	/etc/pf.conf \
@@ -59,7 +60,7 @@ mariefrance: \
 	  hostname.em1 /etc/hostname.em1
 
 /etc/iked.conf : iked.conf
-	~/bin/op run --env-file=.env -- \
+	op run --env-file=.env -- \
 	  sh ../install-secretfied.sh \
 	    iked.conf \
 	    "-o root -g wheel -m 0600" \
@@ -72,6 +73,10 @@ mariefrance: \
 /etc/mygate : mygate
 	install -o root -g wheel -m 0644 \
 	  mygate /etc/mygate
+
+/etc/myname : myname
+	install -o root -g wheel -m 0644 \
+	  myname /etc/myname
 
 /etc/newsyslog.conf : newsyslog.conf
 	install -o root -g wheel -m 0644 \
