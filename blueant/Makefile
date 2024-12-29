@@ -1,5 +1,6 @@
 blueant: \
 	/etc/acme-client.conf \
+	/etc/boot.conf \
 	/etc/avahi/avahi-daemon.conf \
 	/etc/daily.local \
 	/etc/dhclient.conf \
@@ -29,6 +30,7 @@ blueant: \
 	/etc/sysctl.conf \
 	/etc/syslog.conf \
 	/etc/telegraf/telegraf.conf \
+	/etc/ttys \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
 	/root/bin/shutdown-low-battery.sh \
@@ -37,6 +39,10 @@ blueant: \
 /etc/acme-client.conf : acme-client.conf
 	doas install -o root -g wheel -m 0644 \
 	  acme-client.conf /etc/acme-client.conf
+
+/etc/boot.conf : boot.conf
+	install -o root -g wheel -m 0644 \
+	  boot.conf /etc/boot.conf
 
 /etc/avahi/avahi-daemon.conf : avahi-daemon.conf
 	@if ! [ -d /var/db/pkg/avahi-libs* ]; then doas pkg_add avahi; fi
@@ -166,6 +172,10 @@ blueant: \
 	    telegraf.conf \
 	    "-o root -g wheel -m 0644" \
 	    /etc/telegraf/telegraf.conf
+
+/etc/ttys : ttys
+	install -o root -g wheel -m 0644 \
+	  ttys /etc/ttys
 
 /var/log/unbound :
 	doas touch /var/log/unbound
