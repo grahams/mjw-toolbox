@@ -9,6 +9,8 @@ mariefrance: \
 	/etc/hostname.em1 \
 	/etc/iked.conf \
 	/etc/login.conf \
+	/etc/mail/smtpd.conf \
+	/etc/mail/secrets \
 	/etc/mygate \
 	/etc/newsyslog.conf \
 	/etc/ntpd.conf \
@@ -68,6 +70,17 @@ mariefrance: \
 /etc/login.conf : login.conf
 	install -o root -g wheel -m 0644 \
 	  login.conf /etc/login.conf
+
+/etc/mail/smtpd.conf : smtpd.conf
+	install -o root -g wheel -m 0644 \
+	  smtpd.conf /etc/mail/smtpd.conf
+
+/etc/mail/secrets : smtp-secrets
+	op run --env-file=.env -- \
+	  sh ../install-secretfied.sh \
+	    smtp-secrets \
+	    "-o root -g wheel -m 0640" \
+	    /etc/mail/secrets
 
 /etc/mygate : mygate
 	install -o root -g wheel -m 0644 \
