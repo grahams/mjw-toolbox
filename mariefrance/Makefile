@@ -2,11 +2,13 @@ mariefrance: \
 	/etc/acme-client.conf \
 	/etc/boot.conf \
 	/etc/ttys \
+	/etc/daily.local \
 	/etc/dhclient.conf \
 	/etc/dhcpd.conf \
 	/etc/doas.conf \
 	/etc/hostname.em0 \
 	/etc/hostname.em1 \
+	/etc/httpd.conf \
 	/etc/iked.conf \
 	/etc/login.conf \
 	/etc/mail/smtpd.conf \
@@ -40,6 +42,10 @@ mariefrance: \
 	install -o root -g wheel -m 0644 \
 	  ttys /etc/ttys
 
+/etc/daily.local : daily.local
+	doas install -o root -g wheel -m 0644 \
+	  daily.local /etc/daily.local
+
 /etc/dhclient.conf : dhclient.conf
 	install -o root -g wheel -m 0644 \
 	  dhclient.conf /etc/dhclient.conf
@@ -59,6 +65,10 @@ mariefrance: \
 /etc/hostname.em1 : hostname.em1
 	install -o root -g wheel -m 0640 \
 	  hostname.em1 /etc/hostname.em1
+
+/etc/httpd.conf : httpd.conf
+	install -o root -g wheel -m 0644 \
+	  httpd.conf /etc/httpd.conf
 
 /etc/iked.conf : iked.conf
 	op run --env-file=.env -- \

@@ -22,6 +22,8 @@ rcctl stop resolvd
 rcctl enable unbound
 rcctl set ntpd flags -s
 rcctl enable upsmon
+rcctl enable httpd
+rcctl start httpd
 
 rcctl enable tailscaled
 
