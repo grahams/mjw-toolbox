@@ -167,7 +167,7 @@ blueant: \
 
 /etc/telegraf/telegraf.conf : telegraf.conf
 	@if ! [ -d /var/db/pkg/telegraf* ]; then doas pkg_add telegraf; fi
-	~/bin/op run --env-file=.env -- \
+	op run --env-file=.env -- \
 	  sh ../install-secretfied.sh \
 	    telegraf.conf \
 	    "-o root -g wheel -m 0644" \
