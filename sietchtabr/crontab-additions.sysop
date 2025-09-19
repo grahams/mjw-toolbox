@@ -1,0 +1,2 @@
+#minute hour    mday    month   wday    command
+*	*	*	*	*	/home/sysop/bin/mon-uplink.sh

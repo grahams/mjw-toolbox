@@ -1,6 +1,6 @@
 $TTL 3600
 @	IN SOA	ns1 named (
-				2022031900 ; serial
+				2025030400 ; serial
 				300        ; refresh (5m)
 				600        ; retry (5m)
 				8467200    ; expire (14w)
@@ -16,7 +16,8 @@ ns		IN A	207.148.3.69
 ns		IN AAAA	2001:19f0:6401:7ee:5400:2ff:fe9f:e7bc
 hq		IN A	207.148.3.69
 hq		IN AAAA	2001:19f0:6401:7ee:5400:2ff:fe9f:e7bb
-p15		IN A	69.4.102.188
+
+reactor		IN CNAME layeraleph.com.
 
 mail		CNAME	ghs.googlehosted.com.
 @		MX 	1 ASPMX.L.GOOGLE.COM.
@@ -25,6 +26,7 @@ mail		CNAME	ghs.googlehosted.com.
 @		MX	10 ALT2.ASPMX.L.GOOGLE.COM.
 @		MX	10 ALT4.ASPMX.L.GOOGLE.COM.
 @		TXT	"google-site-verification=rQUB_YcOTXiA8ofeg2SPLztMtfLbiOPUHd_NSdX_c9g"
+@		TXT	"v=spf1 include:_spf.google.com ~all"
 google._domainkey	TXT	(
 	"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiIksx"
 	"7+9wYcgwgvkg4bUtY17j+TVVdQ4r2kdZKXkVN1+hKMWH0pKZ+1xmdWyDct2KMms9tDh"
