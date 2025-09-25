@@ -29,7 +29,6 @@ blueant: \
 	/etc/ssh/sshd_config \
 	/etc/sysctl.conf \
 	/etc/syslog.conf \
-	/etc/telegraf/telegraf.conf \
 	/etc/ttys \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
@@ -164,14 +163,6 @@ blueant: \
 /etc/syslog.conf : syslog.conf
 	doas install -o root -g wheel -m 0644 \
 	  syslog.conf /etc/syslog.conf
-
-/etc/telegraf/telegraf.conf : telegraf.conf
-	@if ! [ -d /var/db/pkg/telegraf* ]; then doas pkg_add telegraf; fi
-	op run --env-file=.env -- \
-	  sh ../install-secretfied.sh \
-	    telegraf.conf \
-	    "-o root -g wheel -m 0644" \
-	    /etc/telegraf/telegraf.conf
 
 /etc/ttys : ttys
 	install -o root -g wheel -m 0644 \
