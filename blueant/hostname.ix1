@@ -1,3 +1,4 @@
 media description LAN
 inet 192.168.2.1 255.255.255.0 
+inet6 2001:559:e04a:1::1 64
 mtu 9000

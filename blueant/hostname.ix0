@@ -1,2 +1,6 @@
 media description WAN
-inet 50.170.228.250 255.255.255.252
+inet 50.170.228.250 255.255.255.252 50.170.228.249
+inet6 2001:559:e000::33e 126
+
+!route add -inet default 50.170.228.249
+!route add -inet6 default 2001:559:e000::33d
