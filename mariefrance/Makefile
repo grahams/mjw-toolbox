@@ -89,7 +89,7 @@ mariefrance: \
 	op run --env-file=.env -- \
 	  sh ../install-secretfied.sh \
 	    smtp-secrets \
-	    "-o root -g wheel -m 0640" \
+	    "-o root -g _smtpd -m 0640" \
 	    /etc/mail/secrets
 
 /etc/mygate : mygate
