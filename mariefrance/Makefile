@@ -3,6 +3,7 @@ mariefrance: \
 	/etc/boot.conf \
 	/etc/ttys \
 	/etc/daily.local \
+	/etc/ddclient/ddclient.conf \
 	/etc/dhclient.conf \
 	/etc/dhcpd.conf \
 	/etc/doas.conf \
@@ -45,6 +46,13 @@ mariefrance: \
 /etc/daily.local : daily.local
 	doas install -o root -g wheel -m 0644 \
 	  daily.local /etc/daily.local
+
+/etc/ddclient/ddclient.conf : ddclient.conf
+	op run --env-file=.env -- \
+	  sh ../install-secretfied.sh \
+	    ddclient.conf \
+	    "-o root -g _ddclient -m 0640" \
+	    /etc/ddclient/ddclient.conf
 
 /etc/dhclient.conf : dhclient.conf
 	install -o root -g wheel -m 0644 \
@@ -142,7 +150,7 @@ mariefrance: \
 
 /etc/nut/ups.conf : ups.conf
 	@if ! [ -d /var/db/pkg/nut* ]; then pkg_add nut; fi
-	install -o _ups -g wheel -m 0600 \
+	doas install -o _ups -g wheel -m 0600 \
 	  ups.conf /etc/nut/ups.conf
 
 /var/log/unbound :
@@ -155,5 +163,5 @@ mariefrance: \
 	  unbound.conf /var/unbound/etc/unbound.conf
 
 /root/.forward : .forward
-	install -o root -g wheel -m 0644 \
+	doas install -o root -g wheel -m 0644 \
 	  .forward /root/.forward

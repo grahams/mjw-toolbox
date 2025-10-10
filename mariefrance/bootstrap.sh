@@ -6,7 +6,7 @@
 echo "https://cdn.openbsd.org/pub/OpenBSD/" > /etc/installurl
 
 export PKG_PATH=https://cdn.openbsd.org/%m
-pkg_add zsh python nut git vim tailscale
+pkg_add zsh python nut git vim tailscale ddclient
 
 # for unifi
 pkg_add unzip mongodb jdk javaPathHelper
