@@ -20,6 +20,7 @@ blueant: \
 	/etc/ntpd.conf \
 	/etc/pf.conf \
 	/etc/pf.sshbots \
+	/etc/rad.conf \
 	/etc/rc.conf.local \
 	/etc/resolv.conf \
 	/etc/sensorsd.conf \
@@ -122,6 +123,10 @@ blueant: \
 /etc/pf.sshbots: ../openbsd-skel/pf.sshbots
 	doas install -o root -g wheel -m 0600 \
 	  ../openbsd-skel/pf.sshbots /etc/pf.sshbots
+
+/etc/rad.conf : rad.conf
+	doas install -o root -g wheel -m 0644 \
+	  rad.conf /etc/rad.conf
 
 /etc/rc.conf.local : rc.conf.local
 	doas install -o root -g wheel -m 0644 \
