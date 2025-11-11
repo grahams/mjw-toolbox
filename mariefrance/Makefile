@@ -29,6 +29,7 @@ mariefrance: \
 	/etc/nut/ups.conf \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
+	/usr/local/share/unifi/data/system.properties \
 	/root/.forward
 
 /etc/acme-client.conf : acme-client.conf
@@ -161,6 +162,10 @@ mariefrance: \
 /var/unbound/etc/unbound.conf : unbound.conf
 	install -o root -g _unbound -m 0640 \
 	  unbound.conf /var/unbound/etc/unbound.conf
+
+/usr/local/share/unifi/data/system.properties : unifi.system.properties
+	install -o _unifi -g wheel -m 0600 \
+	  unifi.system.properties /usr/local/share/unifi/data/system.properties
 
 /root/.forward : .forward
 	doas install -o root -g wheel -m 0644 \
