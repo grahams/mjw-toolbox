@@ -3,7 +3,7 @@
 # To be run on a new machine, serves as knowledge store for everything
 # inappropriate for storage in another format.
 
-echo "https://cdn.openbsd.org/pub/OpenBSD/" > /etc/installurl
+echo "https://openbsd.mirrors.hoobly.com/pub/OpenBSD/" > /etc/installurl
 
 export PKG_PATH=https://cdn.openbsd.org/%m
 pkg_add zsh python nut git vim tailscale ddclient
