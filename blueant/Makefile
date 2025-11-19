@@ -1,5 +1,6 @@
 blueant: \
 	/etc/acme-client.conf \
+	/etc/beszel_agent.env \
 	/etc/boot.conf \
 	/etc/avahi/avahi-daemon.conf \
 	/etc/daily.local \
@@ -31,6 +32,7 @@ blueant: \
 	/etc/sysctl.conf \
 	/etc/syslog.conf \
 	/etc/ttys \
+	/etc/rc.d/beszel_agent \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
 	/root/bin/shutdown-low-battery.sh \
@@ -39,6 +41,17 @@ blueant: \
 /etc/acme-client.conf : acme-client.conf
 	doas install -o root -g wheel -m 0644 \
 	  acme-client.conf /etc/acme-client.conf
+
+/etc/beszel_agent.env: beszel_agent.env
+	op run --env-file=.env -- \
+	  sh ../install-secretfied.sh \
+	    beszel_agent.env \
+	    "-o root -g wheel -m 0600" \
+	    /etc/beszel_agent.env
+
+/etc/rc.d/beszel_agent : beszel_agent
+	install -o root -g wheel -m 0755 \
+	  beszel_agent /etc/rc.d/beszel_agent
 
 /etc/boot.conf : boot.conf
 	install -o root -g wheel -m 0644 \

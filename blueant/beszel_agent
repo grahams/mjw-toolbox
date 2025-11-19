@@ -1,0 +1,18 @@
+#!/bin/ksh
+#
+# /etc/rc.d/beszel_agent
+#
+
+# Run a shell that loads env and execs the agent
+daemon="/bin/sh -c '. /etc/beszel_agent.env; exec /usr/local/bin/beszel-agent'"
+
+. /etc/rc.d/rc.subr
+
+# Agent is a foreground daemon; rc.subr will background it for us
+rc_bg=YES
+rc_reload=NO
+
+# Match the *actual* agent process after exec()
+pexp="/usr/local/bin/beszel-agent.*"
+
+rc_cmd "$1"
