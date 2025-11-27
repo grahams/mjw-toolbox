@@ -54,7 +54,7 @@ sietchtabr: fakeroot \
   ${FAKE_ROOT}/etc/doas.conf \
   ${FAKE_ROOT}/etc/exports \
   ${FAKE_ROOT}/etc/hostname.bridge0 \
-  ${FAKE_ROOT}/etc/hostname.bridge23 \
+  ${FAKE_ROOT}/etc/hostname.bridge223 \
   ${FAKE_ROOT}/etc/hostname.bridge42 \
   ${FAKE_ROOT}/etc/hostname.em0 \
   ${FAKE_ROOT}/etc/hostname.em1 \
@@ -69,7 +69,7 @@ sietchtabr: fakeroot \
   ${FAKE_ROOT}/etc/hostname.sec1 \
   ${FAKE_ROOT}/etc/hostname.sec2 \
   ${FAKE_ROOT}/etc/hostname.vether0 \
-  ${FAKE_ROOT}/etc/hostname.vether23 \
+  ${FAKE_ROOT}/etc/hostname.vether223 \
   ${FAKE_ROOT}/etc/hostname.vlan42 \
   ${FAKE_ROOT}/etc/hostname.vlan666 \
   ${FAKE_ROOT}/etc/httpd.conf \
@@ -86,7 +86,6 @@ sietchtabr: fakeroot \
   ${FAKE_ROOT}/etc/pf.conf \
   ${FAKE_ROOT}/etc/pf.conf.vpns \
   ${FAKE_ROOT}/etc/pf.conf.lans \
-  ${FAKE_ROOT}/etc/pf.sshbots \
   ${FAKE_ROOT}/etc/pfstat.conf \
   ${FAKE_ROOT}/etc/rc.local \
   ${FAKE_ROOT}/etc/relayd.conf \
@@ -98,7 +97,6 @@ sietchtabr: fakeroot \
   ${FAKE_ROOT}/etc/syslog.conf \
   ${FAKE_ROOT}/etc/vm.conf \
   ${FAKE_ROOT}/home/sysop/bin/mon-uplink.sh \
-  ${FAKE_ROOT}/usr/local/libexec/munin/plugins/sensors_ \
   ${FAKE_ROOT}/usr/local/libexec/munin/plugins/unbound_munin_ \
   ${FAKE_ROOT}/var/unbound/etc/unbound.conf \
   ${FAKE_ROOT}/var/www/etc/hosts \
@@ -142,9 +140,9 @@ ${FAKE_ROOT}/etc/hostname.bridge0 : hostname.bridge0
 	doas install -o root -g wheel -m 0640 \
 	  hostname.bridge0 ${FAKE_ROOT}/etc/hostname.bridge0
 
-${FAKE_ROOT}/etc/hostname.bridge23 : hostname.bridge23
+${FAKE_ROOT}/etc/hostname.bridge223 : hostname.bridge223
 	doas install -o root -g wheel -m 0640 \
-	  hostname.bridge23 ${FAKE_ROOT}/etc/hostname.bridge23
+	  hostname.bridge223 ${FAKE_ROOT}/etc/hostname.bridge223
 
 ${FAKE_ROOT}/etc/hostname.bridge42 : hostname.bridge42
 	doas install -o root -g wheel -m 0640 \
@@ -202,9 +200,9 @@ ${FAKE_ROOT}/etc/hostname.vether0 : hostname.vether0
 	doas install -o root -g wheel -m 0640 \
 	  hostname.vether0 ${FAKE_ROOT}/etc/hostname.vether0
 
-${FAKE_ROOT}/etc/hostname.vether23 : hostname.vether23
+${FAKE_ROOT}/etc/hostname.vether223 : hostname.vether223
 	doas install -o root -g wheel -m 0640 \
-	  hostname.vether23 ${FAKE_ROOT}/etc/hostname.vether23
+	  hostname.vether223 ${FAKE_ROOT}/etc/hostname.vether223
 
 ${FAKE_ROOT}/etc/hostname.vlan42 : hostname.vlan42
 	doas install -o root -g wheel -m 0640 \
@@ -271,7 +269,7 @@ ${FAKE_ROOT}/etc/ntpd.conf : ntpd.conf
 	echo "rcctl restart ntpd" \
 	  >> ${FAKE_ROOT}/tmp/load-payload-commands
 
-${FAKE_ROOT}/etc/pf.conf : pf.conf ${FAKE_ROOT}/etc/pf.conf.lans ${FAKE_ROOT}/etc/pf.conf.vpns ${FAKE_ROOT}/etc/pf.sshbots ${FAKE_ROOT}/etc/rc.local
+${FAKE_ROOT}/etc/pf.conf : pf.conf ${FAKE_ROOT}/etc/pf.conf.lans ${FAKE_ROOT}/etc/pf.conf.vpns ${FAKE_ROOT}/etc/rc.local
 	echo "pfctl -nf etc/pf.conf" \
 	  >> ${FAKE_ROOT}/tmp/test-payload-commands
 	doas install -o root -g wheel -m 0600 \
@@ -290,10 +288,6 @@ ${FAKE_ROOT}/etc/pf.conf.vpns : pf.conf.vpns
 	  >> ${FAKE_ROOT}/tmp/test-payload-commands
 	doas install -o root -g wheel -m 0600 \
 	  pf.conf.vpns ${FAKE_ROOT}/etc/pf.conf.vpns
-
-${FAKE_ROOT}/etc/pf.sshbots : ../openbsd-skel/pf.sshbots
-	doas install -o root -g wheel -m 0640 \
-	  ../openbsd-skel/pf.sshbots ${FAKE_ROOT}/etc/pf.sshbots
 
 ${FAKE_ROOT}/etc/pfstat.conf : pfstat.conf
 	doas install -o root -g wheel -m 0644 \
@@ -347,10 +341,6 @@ ${FAKE_ROOT}/home/sysop/bin/mon-uplink.sh : mon-uplink.sh
 	doas install -o sysop -g wheel -m 0750 \
 	  mon-uplink.sh ${FAKE_ROOT}/home/sysop/bin/mon-uplink.sh
 
-${FAKE_ROOT}/usr/local/libexec/munin/plugins/sensors_ : sensors_
-	doas install -o root -g bin -m 0755 \
-	  sensors_ ${FAKE_ROOT}/usr/local/libexec/munin/plugins/sensors_
-
 ${FAKE_ROOT}/usr/local/libexec/munin/plugins/unbound_munin_ : unbound_munin_
 	doas install -o root -g bin -m 0755 \
 	  unbound_munin_ ${FAKE_ROOT}/usr/local/libexec/munin/plugins/unbound_munin_
@@ -381,6 +371,12 @@ ${FAKE_ROOT}/var/www/htdocs/pfstat/solarized-dark.min.css : solarized-dark.min.c
 	doas install -o root -g daemon -m 0644 \
 	  solarized-dark.min.css ${FAKE_ROOT}/var/www/htdocs/pfstat/solarized-dark.min.css
 
+${FAKE_ROOT}/tmp/load-payload-commands:
+	touch ${FAKE_ROOT}/tmp/load-payload-commands
+
+${FAKE_ROOT}/tmp/test-payload-commands:
+	touch ${FAKE_ROOT}/tmp/test-payload-commands
+
 ${FAKE_ROOT}/tmp/load-payload.sh : ${FAKE_ROOT}/tmp/load-payload-commands
 	echo "set -e" > ${FAKE_ROOT}/tmp/load-payload.sh
 	doas sort -u -o ${FAKE_ROOT}/tmp/load-payload.sh ${FAKE_ROOT}/tmp/load-payload-commands
@@ -401,6 +397,7 @@ test-payload: payload
 
 load-payload: payload
 	./load-payload.sh
+	doas rm -rf ${FAKE_ROOT}/tmp/*
 
 clean : 
 	doas rm -rf ${FAKE_ROOT}
