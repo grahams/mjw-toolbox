@@ -1,0 +1,22 @@
+# These addresses are excepted from automated ssh bot deny lists.
+# See ../openbsd-skel/{README.md,pf.scannerbots} for details.
+192.168.2.0/24
+192.168.8.0/24
+192.168.13.0/24
+192.168.16.0/24
+192.168.166.0/24
+50.170.228.250/32
+50.170.228.138/32
+sietchtabr.nodeless.net
+korba.nodeless.net
+hq.layeraleph.com
+vpn.grahams.wtf
+
+224.0.0.0/24
+
+10.42.0.0/16
+192.168.223.0/24
+192.168.25.0/24
+169.254.87.0/24
+172.3.141.2/32
+174.21.88.6/32
