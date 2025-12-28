@@ -1,0 +1,38 @@
+# These addresses are excepted from automated bot deny lists, and the
+# router will always pass tcp ssh traffic from them to any address.
+# See ../openbsd-skel/{README.md,pf.scannerbots} for details.
+# lans
+192.168.223.0/24
+192.168.25.0/24
+192.168.1.0/24
+
+192.168.2.0/24     # grahams private subnet
+192.168.8.0/24     # mom subnet
+#192.168.10.0/24   # travel router subnet
+#192.168.13.0/24   # guest subnet (iso)
+192.168.16.0/24    # michener subnet
+
+50.170.228.250        # fiber ipv4
+2001:559:e04a:1::/64  # fiber ipv6 subnet
+
+50.170.228.138        # copper ipv4
+2001:0559:e000::0332  # copper ipv6
+
+# unconfigured local addresses
+169.254.87.0/24
+# multicast
+224.0.0.0/24
+# tpl
+10.42.0.0/16
+# sietchtabr
+69.4.102.188
+# ayat
+64.33.195.232
+# korba
+155.138.220.216
+2001:19f0:5401:d29:5400:2ff:fe9f:b322
+# hq.layeraleph.com
+207.148.3.69
+2001:19f0:6401:7ee:5400:2ff:fe9f:e7bb
+# vpn.grahams.wtf
+50.170.228.250
