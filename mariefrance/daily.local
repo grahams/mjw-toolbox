@@ -2,3 +2,5 @@
 for DOMAIN in mariefrance.grahams.wtf; do
   acme-client ${DOMAIN} && rcctl reload httpd
 done
+
+/home/grahams/src/mjw-toolbox/openbsd-skel/update-scannerbots.sh > /dev/null

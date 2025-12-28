@@ -18,7 +18,6 @@ mariefrance: \
 	/etc/newsyslog.conf \
 	/etc/ntpd.conf \
 	/etc/pf.conf \
-	/etc/pf.sshbots \
 	/etc/rc.conf.local \
 	/etc/resolv.conf \
 	/etc/shells \
@@ -115,10 +114,6 @@ mariefrance: \
 /etc/pf.conf : pf.conf
 	install -o root -g wheel -m 0600 \
 	  pf.conf /etc/pf.conf
-
-/etc/pf.sshbots: ../openbsd-skel/pf.sshbots
-	install -o root -g wheel -m 0600 \
-	  ../openbsd-skel/pf.sshbots /etc/pf.sshbots
 
 /etc/rc.conf.local : rc.conf.local
 	install -o root -g wheel -m 0644 \
