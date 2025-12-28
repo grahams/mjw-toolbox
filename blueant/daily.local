@@ -3,4 +3,4 @@ for DOMAIN in blueant.grahams.wtf; do
   acme-client ${DOMAIN} && rcctl reload httpd
 done
 
-/home/grahams/src/mjw-toolbox/openbsd-skel/update-scannerbots.sh
+/home/grahams/src/mjw-toolbox/openbsd-skel/update-scannerbots.sh > /dev/null
