@@ -11,6 +11,7 @@ blueant: \
 	/etc/hostname.ix1 \
 	/etc/hostname.enc0 \
 	/etc/hostname.enc1 \
+	/etc/hostname.sec0 \
 	/etc/hostname.vlan13 \
 	/etc/hostname.vlan666 \
 	/etc/httpd.conf \
@@ -94,6 +95,10 @@ blueant: \
 /etc/hostname.enc1 : hostname.enc1
 	doas install -o root -g wheel -m 0640 \
 	  hostname.enc1 /etc/hostname.enc1
+
+/etc/hostname.sec0 : hostname.sec0
+	doas install -o root -g wheel -m 0640 \
+	  hostname.sec0 /etc/hostname.sec0
 
 /etc/hostname.vlan13 : hostname.vlan13
 	doas install -o root -g wheel -m 0640 \
