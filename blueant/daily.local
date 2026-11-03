@@ -1,3 +1,5 @@
+dbupdate
+
 # renew letsencrypt certs as necessary
 for DOMAIN in blueant.grahams.wtf; do
   acme-client ${DOMAIN} && rcctl reload httpd
