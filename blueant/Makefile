@@ -37,8 +37,8 @@ blueant: \
 	/etc/rc.d/beszel_agent \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
-	/root/bin/shutdown-low-battery.sh \
-	/root/.forward \
+	.installed.shutdown-low-battery.sh \
+	.installed.forward \
 	/etc/pf.blessed_nodes \
 	/usr/local/sbin/update-scannerbots.sh
 
@@ -231,13 +231,17 @@ blueant: \
 	doas unbound-checkconf /var/unbound/etc/unbound.conf.new
 	doas mv /var/unbound/etc/unbound.conf.new /var/unbound/etc/unbound.conf
 
-/root/bin/shutdown-low-battery.sh : shutdown-low-battery.sh
+# make can't see into /root (mode 700) as a normal user, so these two
+# track a stamp file here instead of the installed file.
+.installed.shutdown-low-battery.sh : shutdown-low-battery.sh
 	doas install -D -o root -g wheel -m 0700 \
 	  shutdown-low-battery.sh /root/bin/shutdown-low-battery.sh
+	touch $@
 
-/root/.forward : .forward
+.installed.forward : .forward
 	doas install -o root -g wheel -m 0644 \
 	  .forward /root/.forward
+	touch $@
 
 /usr/local/sbin/update-scannerbots.sh : ../openbsd-skel/update-scannerbots.sh
 	doas install -o root -g wheel -m 0755 \
