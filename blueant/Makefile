@@ -38,9 +38,15 @@ blueant: \
 	/var/log/unbound \
 	/var/unbound/etc/unbound.conf \
 	/root/bin/shutdown-low-battery.sh \
-	/root/.forward
+	/root/.forward \
+	/etc/pf.blessed_nodes \
+	/usr/local/sbin/update-scannerbots.sh
+
+# Targets for configs with a syntax checker run it before installing, so
+# a typo fails the make instead of breaking the service on next start.
 
 /etc/acme-client.conf : acme-client.conf
+	doas acme-client -n -f acme-client.conf > /dev/null
 	doas install -o root -g wheel -m 0644 \
 	  acme-client.conf /etc/acme-client.conf
 
@@ -52,11 +58,11 @@ blueant: \
 	    /etc/beszel_agent.env
 
 /etc/rc.d/beszel_agent : beszel_agent
-	install -o root -g wheel -m 0755 \
+	doas install -o root -g wheel -m 0755 \
 	  beszel_agent /etc/rc.d/beszel_agent
 
 /etc/boot.conf : boot.conf
-	install -o root -g wheel -m 0644 \
+	doas install -o root -g wheel -m 0644 \
 	  boot.conf /etc/boot.conf
 
 /etc/avahi/avahi-daemon.conf : avahi-daemon.conf
@@ -73,10 +79,12 @@ blueant: \
 	  dhclient.conf /etc/dhclient.conf
 
 /etc/dhcpd.conf : dhcpd.conf
+	doas dhcpd -n -c dhcpd.conf
 	doas install -o root -g wheel -m 0644 \
 	  dhcpd.conf /etc/dhcpd.conf
 
 /etc/doas.conf : doas.conf
+	doas -C doas.conf
 	doas install -o root -g wheel -m 0600 \
 	  doas.conf /etc/doas.conf
 
@@ -109,6 +117,7 @@ blueant: \
 	  hostname.vlan666 /etc/hostname.vlan666
 
 /etc/httpd.conf : httpd.conf
+	doas httpd -n -f httpd.conf
 	doas install -o root -g wheel -m 0644 \
 	  httpd.conf /etc/httpd.conf
 
@@ -118,6 +127,8 @@ blueant: \
 	    iked.conf \
 	    "-o root -g wheel -m 0600" \
 	    /etc/iked.conf
+	# iked insists on a root-owned 0600 file, so check after installing
+	doas iked -n -f /etc/iked.conf
 
 /etc/mygate : mygate
 	doas install -o root -g wheel -m 0644 \
@@ -128,7 +139,8 @@ blueant: \
 	  login.conf /etc/login.conf
 
 /etc/mail/smtpd.conf : smtpd.conf
-	install -o root -g wheel -m 0644 \
+	doas smtpd -n -f smtpd.conf
+	doas install -o root -g wheel -m 0644 \
 	  smtpd.conf /etc/mail/smtpd.conf
 
 /etc/mail/secrets : smtp-secrets
@@ -143,14 +155,21 @@ blueant: \
 	  newsyslog.conf /etc/newsyslog.conf
 
 /etc/ntpd.conf : ntpd.conf
+	doas ntpd -n -f ntpd.conf
 	doas install -o root -g wheel -m 0644 \
 	  ntpd.conf /etc/ntpd.conf
 
-/etc/pf.conf : pf.conf 
+/etc/pf.conf : pf.conf
+	doas pfctl -nf pf.conf
 	doas install -o root -g wheel -m 0600 \
 	  pf.conf /etc/pf.conf
 
+/etc/pf.blessed_nodes : pf.blessed_nodes
+	doas install -o root -g wheel -m 0644 \
+	  pf.blessed_nodes /etc/pf.blessed_nodes
+
 /etc/rad.conf : rad.conf
+	doas rad -n -f rad.conf
 	doas install -o root -g wheel -m 0644 \
 	  rad.conf /etc/rad.conf
 
@@ -184,6 +203,7 @@ blueant: \
 	  ssh_config /etc/ssh/ssh_config
 
 /etc/ssh/sshd_config : ../openbsd-skel/sshd_config
+	doas sshd -t -f ../openbsd-skel/sshd_config
 	doas install -o root -g wheel -m 0644 \
 	  ../openbsd-skel/sshd_config /etc/ssh/sshd_config
 
@@ -196,7 +216,7 @@ blueant: \
 	  syslog.conf /etc/syslog.conf
 
 /etc/ttys : ttys
-	install -o root -g wheel -m 0644 \
+	doas install -o root -g wheel -m 0644 \
 	  ttys /etc/ttys
 
 /var/log/unbound :
@@ -205,8 +225,11 @@ blueant: \
 	doas chmod 644 /var/log/unbound
 
 /var/unbound/etc/unbound.conf : unbound.conf
+	# install beside the live config and check it there, inside the chroot
 	doas install -o root -g _unbound -m 0640 \
-	  unbound.conf /var/unbound/etc/unbound.conf
+	  unbound.conf /var/unbound/etc/unbound.conf.new
+	doas unbound-checkconf /var/unbound/etc/unbound.conf.new
+	doas mv /var/unbound/etc/unbound.conf.new /var/unbound/etc/unbound.conf
 
 /root/bin/shutdown-low-battery.sh : shutdown-low-battery.sh
 	doas install -D -o root -g wheel -m 0700 \
@@ -215,3 +238,7 @@ blueant: \
 /root/.forward : .forward
 	doas install -o root -g wheel -m 0644 \
 	  .forward /root/.forward
+
+/usr/local/sbin/update-scannerbots.sh : ../openbsd-skel/update-scannerbots.sh
+	doas install -o root -g wheel -m 0755 \
+	  ../openbsd-skel/update-scannerbots.sh /usr/local/sbin/update-scannerbots.sh

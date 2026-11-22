@@ -6,7 +6,7 @@ ControlMaster auto
 ControlPath ~/.ssh/control-%r@%h:%p
 ControlPersist 15m
 
-ForwardAgent yes
+ForwardAgent no
 ForwardX11  no
 ForwardX11Trusted  no
 HashKnownHosts yes
