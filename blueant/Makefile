@@ -121,13 +121,13 @@ blueant: \
 	doas install -o root -g wheel -m 0644 \
 	  httpd.conf /etc/httpd.conf
 
+# iked insists on a root-owned 0600 file, so check after installing
 /etc/iked.conf : iked.conf
 	op run --env-file=.env -- \
 	  sh ../install-secretfied.sh \
 	    iked.conf \
 	    "-o root -g wheel -m 0600" \
 	    /etc/iked.conf
-	# iked insists on a root-owned 0600 file, so check after installing
 	doas iked -n -f /etc/iked.conf
 
 /etc/mygate : mygate
@@ -224,8 +224,8 @@ blueant: \
 	doas chown root:_unbound /var/log/unbound
 	doas chmod 644 /var/log/unbound
 
+# install beside the live config and check it there, inside the chroot
 /var/unbound/etc/unbound.conf : unbound.conf
-	# install beside the live config and check it there, inside the chroot
 	doas install -o root -g _unbound -m 0640 \
 	  unbound.conf /var/unbound/etc/unbound.conf.new
 	doas unbound-checkconf /var/unbound/etc/unbound.conf.new
