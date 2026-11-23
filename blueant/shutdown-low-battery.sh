@@ -18,11 +18,6 @@ if [[ "$2" = "below" ]]; then
   sleep ${limit}
   logger "battery at $1, shutting down now."
 
-  # shutdown other boxes
-  ssh root@host1 "halt -p"
-  ssh root@host2 "halt -p"
-  ssh root@host3 "halt -p"
-
-  # shutdown myself
+  # The other hosts on this UPS monitor it and shut themselves down.
   halt -p
 fi
