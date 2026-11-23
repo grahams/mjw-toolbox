@@ -16,26 +16,38 @@
 # The "SOMETHING" in XXX_SOMETHING_XXX must not contain whitespace or
 # "XXX". It may contain "_".
 #
-# Finally, the script removes the temporary file.
-#
-# This script will break badly if a secret contains an '@', since that
-# is what the script uses as a field delimiter for the sed command.
+# Secrets are substituted literally, so they may contain any character
+# except a newline. If any token's variable is unset or empty, nothing
+# is installed. Secrets never appear on a command line, and the
+# temporary file is removed however the script exits.
 
 #set -x
 set -e
 
-if ! [[ -f "$1" ]]; then
+if ! [ -f "$1" ]; then
   echo "Usage: "
   echo '  install-secretfied.sh <input> <install(1) flags> <target>'
   exit 1
 fi
 
-TMPFILE=`mktemp` || exit 1
-cp $1 $TMPFILE
+TMPFILE=$(mktemp) || exit 1
+trap 'rm -f "$TMPFILE"' EXIT
+trap 'exit 1' HUP INT TERM
 
-for TOKEN in $(grep -o 'XXX_[^ ]*_XXX' $TMPFILE); do
-  eval "SECRET=\$$TOKEN"
-  sed -i -e "s@$TOKEN@$SECRET@" $TMPFILE
-done
-/usr/bin/doas /usr/bin/install $2 $TMPFILE $3
-/bin/rm $TMPFILE
+awk '
+{
+  rest = $0
+  out = ""
+  while (match(rest, /XXX_[^ ]*_XXX/)) {
+    tok = substr(rest, RSTART, RLENGTH)
+    if (!(tok in ENVIRON) || ENVIRON[tok] == "") {
+      printf "install-secretfied.sh: %s is unset or empty\n", tok > "/dev/stderr"
+      exit 1
+    }
+    out = out substr(rest, 1, RSTART - 1) ENVIRON[tok]
+    rest = substr(rest, RSTART + RLENGTH)
+  }
+  print out rest
+}' "$1" > "$TMPFILE"
+
+/usr/bin/doas /usr/bin/install $2 "$TMPFILE" "$3"
