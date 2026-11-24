@@ -1,0 +1,5 @@
+# uplink
+# theo says jumbo in ixl is buggy
+mtu 1500
+inet autoconf
+inet6 autoconf
